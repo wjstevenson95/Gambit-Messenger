@@ -1,0 +1,31 @@
+{
+  "name": "gambit-messenger",
+  "version": "1.0.0",
+  "description": "A simple messenger web application built on MEAN stack",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/wjstevenson95/Gambit-Messenger.git"
+  },
+  "keywords": [
+    "npm"
+  ],
+  "author": "William Stevenson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wjstevenson95/Gambit-Messenger/issues"
+  },
+  "homepage": "https://github.com/wjstevenson95/Gambit-Messenger#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "chai": "^4.1.2",
+    "express": "^4.16.2",
+    "mocha": "^5.0.2",
+    "mongoose": "^5.0.9",
+    "morgan": "^1.9.0",
+    "request": "^2.83.0"
+  }
+}
