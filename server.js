@@ -9,7 +9,10 @@ var port = 8080;
 
 var gambit_db = require('./config/gambit_db');
 
-app.use(body_parser.urlencoded({ extended: true })); 
+app.use(express.static(__dirname + '/public'));
+app.use(morgan('dev'));
+app.use(body_parser.urlencoded({ extended: true }));
+app.use(body_parser.json());
 
 app.get('/', (req,res) => {
 
