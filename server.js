@@ -1,35 +1,35 @@
 require('dotenv').config();
+require('rootpath')();
 var express = require('express');
-var morgan = require('morgan');
-var body_parser = require('body-parser');
-var mongo_cli = require('mongodb').MongoClient;
-
 var app = express();
-var port = 8080;
+var session = require('express-session');
+var body_parser = require('body-parser');
+var morgan = require('morgan');
+var expressJwt = require('express-jwt');
 
-var gambit_db = require('./config/gambit_db');
 
-app.use(express.static(__dirname + '/public'));
+app.set('view engine','ejs');
+app.set('views',__dirname + '/views');
 app.use(morgan('dev'));
 app.use(body_parser.urlencoded({ extended: true }));
 app.use(body_parser.json());
+ap.use(session({secret: process.env.APP_SECRET, resave: true, saveUninitialized: false}));
 
+// use JWT auth to secure API
+app.use('/api',expresJwt({secret: process.env.APP_SECRET}).unless({path: ['/api/users/authenticate','/api/users/register']}));
+
+
+//routes
+app.use('/login',require('./controllers/login.controller'));
+app.use('/register',require('./controllers/register.controller'));
+app.use('/app',require('./controllers/app.controller'));
+app.use('/api/users',require('./controllers/api/users.controller'));
+
+// '/app' is default route (remember SPA)
 app.get('/', (req,res) => {
+	return res.redirect('/app');
+};
 
-	console.log(gambit_db.url)
-	mongo_cli.connect(gambit_db.url, (err,client) => {
-		if(err) throw err;
-
-		var db = client.db('gambit_messenger');
-		db.collection('users').find().toArray((err, result) => {
-			if(err) throw err;
-
-			res.send(result);
-		});
-	});
-
+var server = app.listen(8080, () => {
+	console.log('Server listening at http://' + server.address().address + ":" + server.address().port);
 });
-
-app.listen(port);
-
-exports = module.exports = app;

@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/wjstevenson95/Gambit-Messenger#readme",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "chai": "^4.1.2",
     "dotenv": "^5.0.1",
