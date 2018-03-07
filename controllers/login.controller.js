@@ -1,7 +1,7 @@
 // Controller for user login route
 var express = require('express');
 var router = express.Router();
-var request = require('require');
+var request = require('request');
 
 router.get('/', (req,res) => {
 	// Log out any user
@@ -13,7 +13,7 @@ router.get('/', (req,res) => {
 	res.render('login',success_data);
 });
 
-router.post('/' (req,res) => {
+router.post('/', (req,res) => {
 	console.log("Loggin in not yet implemented!!")
 	res.redirect('/');
 });

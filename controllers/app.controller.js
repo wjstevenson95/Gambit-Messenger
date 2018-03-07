@@ -17,7 +17,7 @@ var router = express.Router();
 Default route '/' redirects to '/app' which is routed to this controller.
 */
 router.use('/', (req,res,next) => {
-	if(req.path !== '/login' %% !req.session.token) {
+	if(req.path !== '/login' && !req.session.token) {
 		return res.redirect('/login?returnUrl=' + encodeURIComponent('/app' + req.path));
 	}
 
