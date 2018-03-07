@@ -10,7 +10,6 @@ router.get('/', (req,res) => {
 
 router.post('/', (req,res) => {
 	// Get information, then make a request to 'api/users/register'
-	console.log("Getting to register.controller POST route");
 	request.post({
 		url: process.env.API_URL + '/users/register',
 		form: req.body,
@@ -21,7 +20,7 @@ router.post('/', (req,res) => {
 			return res.render('register', {error: 'An error occurred!'});
 		}
 
-		if(response.statusCode !== '200') {
+		if(response.statusCode != 200) {
 			//
 			return res.render('register', {
 				error: response.body,
@@ -32,7 +31,7 @@ router.post('/', (req,res) => {
 			});
 		}
 
-		req.session.succes = "Registration successful!";
+		req.session.success = "Registration successful!";
 		return res.redirect('/login');
 	});
 });

@@ -23,7 +23,6 @@ function authenticateUser(req, res) {
 }
 
 function registerUser(req, res) {
-	console.log("Got to /api/users.controller route function for /register");
 	// This function runs after the register.controller sends a request.post for 'api/users/register' 
 	// which gets routed to this registerUser function above ^
 	// This function will then use userServiceConnection to connect to the model that serves API requests

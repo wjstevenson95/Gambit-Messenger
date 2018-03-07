@@ -25,7 +25,7 @@ function authenticate(email,password) {
 
 	var db = mongo.connect(str_url, function(err, database) {
 		const gambit_database = database.db('gambit_messenger');
-		gambit_database .collection('users').find({email: email}, function(err, user) {
+		gambit_database .collection('users').findOne({email: email}, function(err, user) {
 			if(err) deferred.reject(err);
 
 			// Check if return a valid user with email and that password is correct...
@@ -35,29 +35,23 @@ function authenticate(email,password) {
 				deferred.resolve();
 			}
 		});
-
-		database.close();
 	});
 
 	return deferred.promise;
 }
 
-function register(user_parameters) {
+async function register(user_parameters) {
 	var deferred = q.defer();
-	console.log("getting here...");
-
-	// TODO: check if username already exists
+	console.log(user_parameters.email);
 	var db = mongo.connect(str_url, function(err, database) {
 		const gambit_database = database.db('gambit_messenger');
-		gambit_database.collection('users').find(
+		gambit_database.collection('users').findOne(
 			{email: user_parameters.email}, 
 			function(err, user) {
-				console.log("callback....");
 				if(err) deferred.reject(err);
 
 				// If found a registered user with the input email
 				if(user) {
-					console.log("should be getting here...");
 					// username already exists
 					deferred.reject('Email "' + user_parameters.email + '" is already taken!');
 				} else {
@@ -65,21 +59,23 @@ function register(user_parameters) {
 			}
 		});
 
-		function register_user() {
+		async function register_user() {
 		// omit so that we can hash it and add in later (for security)
 			var user = _.omit(user_parameters, 'password');
 			user.password = bcrypt.hashSync(user_parameters.password,10);
 
 			// now add user to database
-			gambit_database.collection('users').insert(user, function(err, records) {
-				if(err) deferred.reject(err);
+			console.log(user);
+			await gambit_database.collection('users').insert(user, function(err, records) {
+				if(err) {
+					console.log(err);
+					deferred.reject(err);
+				}
 
 				deferred.resolve();
 			});
 
 		}
-
-		database.close();
 	});
 
 	return deferred.promise;
