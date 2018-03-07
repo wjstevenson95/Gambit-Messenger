@@ -1,0 +1,37 @@
+<%- include partials/header.ejs %>
+
+<div class="form-container">
+	<h2>Register</h2>
+	<% if(locals.error) { %>
+		<div alert alert-danger><%= error %></div>
+	<% } %>
+	<form method="post">
+		<div class="form-group">
+			<label for="email">Email</label>
+			<input type="text" name="email" id="email" class="form-control">
+		</div>
+		<div class="form-group">
+			<label for="password">Password</label>
+			<input type="password" name="password" id="password" class="form-control">
+		</div>
+		<div class="form-group">
+			<label for="first_name">First Name</label>
+			<input type="text" name="first_name" id="first_name" class="form-control">
+		</div>
+		<div class="form-group">
+			<label for="last_name">Last Name</label>
+			<input type="text" name="last_name" id="last_name" class="form-control">
+		</div>
+		<div class="form-group">
+			<label for="phone">Phone Number</label>
+			<input type="text" name="phone", id="phone" placeholder="Ex. 1231234567" class="form-control">
+		</div>
+		<div class="form-group">
+			<button class="btn btn-primary">Register</button>
+			<a href="/login" class="btn btn-link">Login</a>
+		</div>
+
+	</form>
+</div>
+
+<%- include partials/footer.ejs %>

@@ -1,0 +1,29 @@
+<%- include partials/header.ejs %>
+
+<div class="form-container">
+	<h3>Login</h3>
+	<% if(locals.error) { %>
+		<div alert alert-danger><%= error %></div>
+	<% } %>
+
+	<% if(locals.success) { %>
+		<div alert alert-success><%= success %></div>
+	<% } %>
+
+	<form method="post">
+		<div class="form-group">
+			<label for="email">Email</label>
+			<input type="text" name="email" id="email" class="form-control" value="<%= locals.email || ' ' %>">
+		</div>
+		<div class="form-group">
+			<label for="password">Password</label>
+			<input type="password" name="password" id="password" class="form-control">
+		</div>
+		<div class="form-group">
+			<button type="submit" class="btn btn-primary">Submit</button>
+			<a href="/register" class="btn btn-link"></a>
+		</div>
+	</form>
+</div>
+
+<%- include partials/footer.ejs %>
