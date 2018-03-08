@@ -10,7 +10,11 @@ router.get('/', (req,res) => {
 	var success_data = { success: req.session.success };
 	delete req.session.success;
 
-	res.render('login',success_data);
+	if(!req.query.returnUrl) {
+		res.redirect('/login?returnUrl=' + encodeURIComponent('/app'));
+	} else {
+		res.render('login',success_data);
+	}
 });
 
 router.post('/', (req,res) => {
@@ -36,6 +40,7 @@ router.post('/', (req,res) => {
 		req.session.token = body.token;
 
 		var returnUrl = req.query.returnUrl && decodeURIComponent(req.query.returnUrl) || '';
+		console.log("returnURL: " + returnUrl);
         res.redirect(returnUrl);
 	});
 });
