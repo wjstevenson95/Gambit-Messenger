@@ -1,0 +1,1 @@
+// Messages controller for angular app
