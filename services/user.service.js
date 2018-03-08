@@ -24,14 +24,15 @@ function authenticate(username,password) {
 	var deferred = q.defer();
 
 	var db = mongo.connect(str_url, function(err, database) {
-		const gambit_database = database.db('gambit_messenger');
-		gambit_database .collection('users').findOne({username: username}, function(err, user) {
+		database.db('gambit_messenger').collection('users').findOne({username: username}, function(err, user) {
 			if(err) deferred.reject(err);
 
 			// Check if return a valid user with username and that password is correct...
 			if(user && bcrypt.compareSync(password,user.password)) {
+
 				deferred.resolve(jwt.sign({sub: user._id},process.env.APP_SECRET));
 			} else {
+				console.log("shouldn't print...");
 				deferred.resolve();
 			}
 		});

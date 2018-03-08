@@ -41,7 +41,7 @@ router.post('/', (req,res) => {
 
 		var returnUrl = req.query.returnUrl && decodeURIComponent(req.query.returnUrl) || '';
 		console.log("returnURL: " + returnUrl);
-        res.redirect(returnUrl);
+        res.redirect(302,returnUrl);
 	});
 });
 

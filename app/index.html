@@ -1,6 +1,6 @@
 <!-- Main html file for the angular application, contains overall template -->
 <!DOCTYPE html>
-<html>
+<html ng-app='app'>
 <head>
 	<meta charset="utf-8">
 	<title>GAMBIT Messenger</title>
@@ -8,18 +8,17 @@
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="content/app.css">
 </head>
-<body class="container">
-	<header>
+<body>
 		<nav class="navbar navbar-inverse">
 			<div class="container-fluid">
 				<div class="navbar-header">
-					<a class="navbar-brand">Gambit</a>
+					<a href="/" class="navbar-brand">Gambit</a>
 				</div>
 				<ul class="nav navbar-nav">
-					<li><a href="#">Home</a></li>
-					<li><a href="#">Account</a></li>
-					<li><a href="#">Contacts</a></li>
-					<li><a href="#">Messages</a></li>
+					<li ng-class="{active: activeTab === 'home'}"><a ui-sref="home">Home</a></li>
+					<li ng-class="{active: activeTab === 'account'}"><a ui-sref="account">Account</a></li>
+					<li ng-class="{active: activeTab === 'contacts'}"><a ui-sref="contacts">Contacts</a></li>
+					<li ng-class="{active: activeTab === 'messages'}"><a ui-sref="messages">Messages</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="/login" target="_self">Logout</a></li>
@@ -31,24 +30,21 @@
             <div class="{{'alert alert-' + flash.type}}" ng-bind="flash.message"></div>
         </div>
 		-->
-	</header>
 
-	<main></main>
+	<main ui-view></main>
 
 	<footer></footer>
 
-	<!-- External scripts -->
+	<!--<script src="services/user.service.js"></script>-->
+	<!--<script src="services/flash.service.js"></script>-->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
 
-	<!-- Application scripts -->
-	<script src="app.js"></script>
-	<script src="services/user.service.js"></script>
-	<script src="services/flash.service.js"></script>
-	<script src="home/index.controller.js"></script>
-	<script src="account/index.controller.js"></script>
-	<script src="contacts/index.controller.js"></script>
-	<script src="messages/index.controller.js"></script>
+	<script type="text/javascript" src="app.js"></script>
+	<script type="text/javascript" src="home/index.controller.js"></script>
+	<script type="text/javascript" src="account/index.controller.js"></script>
+	<script type="text/javascript" src="contacts/index.controller.js"></script>
+	<script type="text/javascript" src="messages/index.controller.js"></script>
 </body>
 </html>
