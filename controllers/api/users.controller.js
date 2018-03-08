@@ -19,7 +19,17 @@ router.delete('/:_id',deleteUser);
 module.exports = router;
 
 function authenticateUser(req, res) {
-	res.send('200 OK');
+	userServiceConnection.authenticate(req.body.username,req.body.password)
+		.then(function(token) {
+			if(token) {
+				res.send({token: token});
+			} else {
+				res.status(401).send("Username or password is incorrect");
+			}
+		})
+		.catch(function(err) {
+			res.status(400).send(err);
+		});
 }
 
 function registerUser(req, res) {
@@ -36,17 +46,17 @@ function registerUser(req, res) {
 		})
 		.catch(function(err) {
 			res.status(400).send(err);
-		})
+		});
 }
 
 function getCurrentUser(req, res) {
-	res.send('200 OK');
+	res.sendStatus(200);
 }
 
 function updateUser(req, res) {
-	res.send('200 OK');
+	res.sendStatus(200);
 }
 
 function deleteUser(req, res) {
-	res.send('200 OK');
+	res.sendStatus(200);
 }

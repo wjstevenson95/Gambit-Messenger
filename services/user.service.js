@@ -20,17 +20,17 @@ api_service.delete = _delete;
 
 module.exports = api_service;
 
-function authenticate(email,password) {
+function authenticate(username,password) {
 	var deferred = q.defer();
 
 	var db = mongo.connect(str_url, function(err, database) {
 		const gambit_database = database.db('gambit_messenger');
-		gambit_database .collection('users').findOne({email: email}, function(err, user) {
+		gambit_database .collection('users').findOne({username: username}, function(err, user) {
 			if(err) deferred.reject(err);
 
-			// Check if return a valid user with email and that password is correct...
+			// Check if return a valid user with username and that password is correct...
 			if(user && bcrypt.compareSync(password,user.password)) {
-				deferred.resove(jwt.sign({sub: user._id},process.env.APP_SECRET));
+				deferred.resolve(jwt.sign({sub: user._id},process.env.APP_SECRET));
 			} else {
 				deferred.resolve();
 			}
@@ -42,18 +42,18 @@ function authenticate(email,password) {
 
 async function register(user_parameters) {
 	var deferred = q.defer();
-	console.log(user_parameters.email);
+	console.log(user_parameters.username);
 	var db = mongo.connect(str_url, function(err, database) {
 		const gambit_database = database.db('gambit_messenger');
 		gambit_database.collection('users').findOne(
-			{email: user_parameters.email}, 
+			{username: user_parameters.username}, 
 			function(err, user) {
 				if(err) deferred.reject(err);
 
-				// If found a registered user with the input email
+				// If found a registered user with the input username
 				if(user) {
 					// username already exists
-					deferred.reject('Email "' + user_parameters.email + '" is already taken!');
+					deferred.reject('Username "' + user_parameters.username + '" is already taken!');
 				} else {
 					register_user();
 			}

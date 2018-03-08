@@ -35,6 +35,6 @@ router.get('/token', (req,res) => {
 });
 
 // Serve angular app files for express through the '/' root
-router.use('/',express.static('public'));
+router.use('/',express.static('app'));
 
 module.exports = router;
