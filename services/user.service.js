@@ -33,7 +33,6 @@ function authenticate(username,password) {
 
 				deferred.resolve(jwt.sign({sub: user._id},process.env.APP_SECRET));
 			} else {
-				console.log("shouldn't print...");
 				deferred.resolve();
 			}
 		});
@@ -146,7 +145,15 @@ function update(user_id, user_params) {
 	return deferred.promise;
 }
 
-function _delete() {
+function _delete(user_id) {
 	var deferred = q.defer();
+	var db = mongo.connect(str_url, function(err, database) {
+		gambit_users = database.db('gambit_messenger').collection('users');
+		gambit_users.remove({_id: ObjectId(user_id)}, function(err) {
+			if(err) deferred.reject(err);
+
+			deferred.resolve();
+		});
+	});
 	return deferred.promise;
 }

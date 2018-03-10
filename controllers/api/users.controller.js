@@ -73,5 +73,19 @@ function updateUser(req, res) {
 }
 
 function deleteUser(req, res) {
-	res.sendStatus(200);
+	userServiceConnection.delete(req.params._id)
+		.then(function() {
+			res.sendStatus(200);
+		})
+		.catch(function(err) {
+			res.status(400).send(err);
+		});
 }
+
+
+
+
+
+
+
+

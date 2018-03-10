@@ -23,8 +23,9 @@
 			return $http.put('/api/users/' + user._id, user).then(handle_success, handle_error);
 		}
 
-		function deleteUser() {
+		function deleteUser(user_id) {
 			// Delete current user
+			return $http.delete('/api/users/' + user_id).then(handle_success, handle_error);
 		}
 
 		function handle_success(res) {

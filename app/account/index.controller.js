@@ -4,7 +4,7 @@
 
 	angular.module('app').controller('Account.IndexController',controller);
 
-	function controller(UserService, FlashService) {
+	function controller($window, UserService, FlashService) {
 		var vm = this;
 		vm.user = null;
 		vm.update_user = save_user;
@@ -27,7 +27,12 @@
 		}
 
 		function delete_user() {
-			// Not done yet....
+			UserService.deleteUser(vm.user._id).then(function() {
+				$window.location = '/login';
+			})
+			.catch(function(err) {
+				FlashService.error(err);
+			});
 		}
 	}
 })();
