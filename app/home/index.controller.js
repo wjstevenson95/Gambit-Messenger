@@ -14,7 +14,6 @@
 
 		function initialize_controller() {
 			// UserService is app factory service
-			console.log("initializing controller...");
 			UserService.getCurrent().then(function(user) {
 				vm.user = user;
 			});

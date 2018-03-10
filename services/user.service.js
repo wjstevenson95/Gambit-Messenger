@@ -99,8 +99,50 @@ function getById(user_id) {
 	return deferred.promise;
 }
 
-function update() {
+function update(user_id, user_params) {
 	var deferred = q.defer();
+	var db = mongo.connect(str_url, function(err, database) {
+		gambit_users = database.db('gambit_messenger').collection('users');
+		gambit_users.findOne({_id:ObjectId(user_id)}, function(err, user) {
+			if(err) deferred.reject(err);
+				// Check if username has changed
+			if(user.username !== user_params.username) {
+				// Need to check if new username is available.
+				gambit_users.findOne({username: user_params.username}, function(err, user) {
+					if(err) deferred.reject(err);
+
+					if(user) {
+						deferred.reject('Username ' + user_params.username + ' already taken!');
+					} else {
+						update_user();
+					}
+				});
+			} else {
+				update_user();
+			}
+		});
+
+		function update_user() {
+			var user_info_update = {
+				username: user_params.username,
+				first_name: user_params.first_name,
+				last_name: user_params.last_name,
+				phone: user_params.phone
+			};
+
+			// Check if password also updated
+			if(user_params.password) {
+				user_info_update.password = bcrypt.hashSync(user_params.password, 10);
+			}
+
+			gambit_users.update({_id: ObjectId(user_id)}, {$set: user_info_update}, function(err, doc, status) {
+				if(err) deferred.reject(err);
+
+				deferred.resolve();
+			});
+		}
+	});
+
 	return deferred.promise;
 }
 

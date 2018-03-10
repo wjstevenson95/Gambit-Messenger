@@ -11,4 +11,10 @@
 
 .welcome-container.p {
 	margin:auto;
+	width: 50%;
+}
+
+.form-container-content {
+	margin: auto;
+	width: 50%;
 }

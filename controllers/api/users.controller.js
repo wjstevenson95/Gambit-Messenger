@@ -43,7 +43,6 @@ function registerUser(req, res) {
 }
 
 function getCurrentUser(req, res) {
-	console.log("getting here...");
 	userServiceConnection.getById(req.user.sub)
 		.then(function(user) {
 			if(user) {
@@ -58,7 +57,19 @@ function getCurrentUser(req, res) {
 }
 
 function updateUser(req, res) {
-	res.sendStatus(200);
+	var user_id = req.user.sub;
+	if(req.params._id !== user_id) {
+		// can only update your own account
+		res.status(401).send('You can only update your own account');
+	}
+
+	userServiceConnection.update(user_id, req.body)
+		.then(function() {
+			res.sendStatus(200);
+		})
+		.catch(function(err) {
+			res.status(400).send(err);
+	});
 }
 
 function deleteUser(req, res) {

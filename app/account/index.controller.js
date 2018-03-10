@@ -4,11 +4,30 @@
 
 	angular.module('app').controller('Account.IndexController',controller);
 
-	function controller() {
+	function controller(UserService, FlashService) {
 		var vm = this;
-
 		vm.user = null;
-		//vm.saveUser = saveUser
-		//vm.deleteUser = deleteUser
+		vm.update_user = save_user;
+		vm.delete_user = delete_user;
+
+		initialize_controller();
+
+		function initialize_controller() {
+			UserService.getCurrent().then(function(user) {
+				vm.user = user;
+			})
+		}
+
+		function save_user() {
+			UserService.updateUser(vm.user).then(function() {
+				FlashService.success('User Updated!');
+			}).catch(function(err) {
+				FlashService.error(err);
+			})
+		}
+
+		function delete_user() {
+			// Not done yet....
+		}
 	}
 })();

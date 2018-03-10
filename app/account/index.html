@@ -1,2 +1,34 @@
 <!-- View for account tab -->
-<p>View for the Accounts Tab - Will be implemented later!!</p>
+<div class="form-container">
+	<div class="form-container-content">
+		<h3>Welcome {{ vm.user.first_name }}</h3>
+		<form method="post">
+			<div class="form-group">
+				<label for="first_name">First Name</label>
+				<input type="text" class="form-control" name="first_name" ng-model="vm.user.first_name" required>
+			</div>
+			<div class="form-group">
+				<label for="last_name">Last Name</label>
+				<input type="text" class="form-control" name="last_name" ng-model="vm.user.last_name" required>
+			</div>
+			<div class="form-group">
+				<label for="phone">Phone</label>
+				<input type="text" class="form-control" name="phone" ng-model="vm.user.phone" required>
+			</div>
+			<div class="form-group">
+				<label for="username">Username</label>
+				<input type="text" class="form-control" name="username" ng-model="vm.user.username" required>
+			</div>
+			<div class="form-group">
+				<label for="password">Password</label>
+				<input type="password" placeholder="No value if not updating account password!" class="form-control" name="password" ng-model="vm.user.password">
+			</div>
+			<div class="from-group">
+				<button class="btn btn-primary" ng-click="vm.update_user()">Update</button>
+				<button class="btn btn-danger" ng-click="vm.delete_user()">Delete Account</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+

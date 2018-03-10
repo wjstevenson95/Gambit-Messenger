@@ -15,12 +15,12 @@
 
 		function getCurrent() {
 			// AJAX request to api/users for current logged-in user
-			console.log("got to user service, AJAX call next...");
 			return $http.get('/api/users/current').then(handle_success, handle_error);
 		}
 
-		function updateUser() {
+		function updateUser(user) {
 			// Update information of current user
+			return $http.put('/api/users/' + user._id, user).then(handle_success, handle_error);
 		}
 
 		function deleteUser() {
