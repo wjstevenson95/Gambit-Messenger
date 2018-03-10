@@ -1,6 +1,6 @@
 <!-- Main html file for the angular application, contains overall template -->
 <!DOCTYPE html>
-<html ng-app='app'>
+<html>
 <head>
 	<meta charset="utf-8">
 	<title>GAMBIT Messenger</title>
@@ -9,6 +9,7 @@
 	<link rel="stylesheet" type="text/css" href="content/app.css">
 </head>
 <body>
+	<header>
 		<nav class="navbar navbar-inverse">
 			<div class="container-fluid">
 				<div class="navbar-header">
@@ -25,23 +26,25 @@
 				</ul>
 			</div>
 		</nav>
-		<!--
+
+		<!-- based on flash.type, class will evalute to bootstrap 
+		alert alert-success or alert alert-danger... and then displays message-->
 		<div class="flash-message" ng-if="flash">
             <div class="{{'alert alert-' + flash.type}}" ng-bind="flash.message"></div>
         </div>
-		-->
+	</header>
 
 	<main ui-view></main>
 
 	<footer></footer>
 
-	<!--<script src="services/user.service.js"></script>-->
-	<!--<script src="services/flash.service.js"></script>-->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
 
 	<script type="text/javascript" src="app.js"></script>
+	<script type="text/javascript" src="services/user.service.js"></script>
+	<script type="text/javascript" src="services/flash.service.js"></script>
 	<script type="text/javascript" src="home/index.controller.js"></script>
 	<script type="text/javascript" src="account/index.controller.js"></script>
 	<script type="text/javascript" src="contacts/index.controller.js"></script>

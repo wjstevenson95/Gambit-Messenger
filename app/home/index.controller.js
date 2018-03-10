@@ -5,9 +5,19 @@
 
 	angular.module('app').controller('Home.IndexController',controller);
 
-	function controller() {
+	function controller(UserService) {
 		var vm = this;
 
 		vm.user = null;
+
+		initialize_controller();
+
+		function initialize_controller() {
+			// UserService is app factory service
+			console.log("initializing controller...");
+			UserService.getCurrent().then(function(user) {
+				vm.user = user;
+			});
+		}
 	}
 })();

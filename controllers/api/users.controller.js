@@ -33,13 +33,6 @@ function authenticateUser(req, res) {
 }
 
 function registerUser(req, res) {
-	// This function runs after the register.controller sends a request.post for 'api/users/register' 
-	// which gets routed to this registerUser function above ^
-	// This function will then use userServiceConnection to connect to the model that serves API requests
-	// that require database information or changes.
-	// userServiceConnetion will called the appropriate 
-
-	// Needs to check to make sure that username doesn't already exist....if so send that info back
 	userServiceConnection.register(req.body)
 		.then(function() {
 			res.sendStatus(200);
@@ -50,7 +43,18 @@ function registerUser(req, res) {
 }
 
 function getCurrentUser(req, res) {
-	res.sendStatus(200);
+	console.log("getting here...");
+	userServiceConnection.getById(req.user.sub)
+		.then(function(user) {
+			if(user) {
+				res.send(user);
+			} else {
+				res.sendStatus(404);
+			}
+		})
+		.catch(function(err) {
+			res.status(400).send(err);
+		});
 }
 
 function updateUser(req, res) {

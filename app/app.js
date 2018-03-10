@@ -4,6 +4,8 @@
 
 // SEAF wrapped
 (function() {
+	'use strict';
+
 	var gambit = angular.module('app',['ui.router']).config(config).run(run);
 
 	function config($stateProvider, $urlRouterProvider) {

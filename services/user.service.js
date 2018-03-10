@@ -1,5 +1,6 @@
 // This is essentially the model for accessing the database through API calls
 var mongo = require('mongodb').MongoClient;
+var ObjectId = require('mongodb').ObjectId;
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcrypt');
 var _ = require('lodash');
@@ -13,8 +14,8 @@ var str_url = "mongodb://" +
 var api_service = {};
 
 api_service.authenticate = authenticate;
-api_service.getById = getById;
 api_service.register = register;
+api_service.getById = getById;
 api_service.update = update;
 api_service.delete = _delete;
 
@@ -41,9 +42,8 @@ function authenticate(username,password) {
 	return deferred.promise;
 }
 
-async function register(user_parameters) {
+function register(user_parameters) {
 	var deferred = q.defer();
-	console.log(user_parameters.username);
 	var db = mongo.connect(str_url, function(err, database) {
 		const gambit_database = database.db('gambit_messenger');
 		gambit_database.collection('users').findOne(
@@ -60,14 +60,14 @@ async function register(user_parameters) {
 			}
 		});
 
-		async function register_user() {
+		function register_user() {
 		// omit so that we can hash it and add in later (for security)
 			var user = _.omit(user_parameters, 'password');
 			user.password = bcrypt.hashSync(user_parameters.password,10);
 
 			// now add user to database
 			console.log(user);
-			await gambit_database.collection('users').insert(user, function(err, records) {
+			gambit_database.collection('users').insert(user, function(err, records) {
 				if(err) {
 					console.log(err);
 					deferred.reject(err);
@@ -82,8 +82,20 @@ async function register(user_parameters) {
 	return deferred.promise;
 }
 
-function getById() {
+function getById(user_id) {
 	var deferred = q.defer();
+	var db = mongo.connect(str_url, function(err, database) {
+		database.db('gambit_messenger').collection('users').findOne({_id:ObjectId(user_id)}, function(err, user) {
+			if(err) deferred.reject(err.name + ":" + err.message);
+
+			if(user) {
+				deferred.resolve(_.omit(user,'password'));
+			} else {
+				deferred.resolve();
+			}
+		});
+	});
+
 	return deferred.promise;
 }
 

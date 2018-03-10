@@ -1,1 +1,14 @@
 /* CSS file for angular app */
+
+.flash-message {
+	margin-top: 20px;
+}
+
+.welcome-container {
+	margin: auto;
+	width: 50%;
+}
+
+.welcome-container.p {
+	margin:auto;
+}
