@@ -10,30 +10,40 @@ router.get('/', (req,res) => {
 
 router.post('/', (req,res) => {
 	// Get information, then make a request to 'api/users/register'
-	request.post({
+	if(req.body.password !== req.body.confirm_password) {
+		return res.render('register', {
+			error: 'Passwords do not match!',
+			username: req.body.username,
+			first_name: req.body.first_name,
+			last_name: req.body.last_name,
+			phone: req.body.phone
+		});
+	} else {
+		request.post({
 		url: process.env.API_URL + '/users/register',
 		form: req.body,
 		json: true 
-	}, function(err,response,body) {
-		if(err) {
-			console.log(err);
-			return res.render('register', {error: 'An error occurred!'});
-		}
+		}, function(err,response,body) {
+			if(err) {
+				console.log(err);
+				return res.render('register', {error: 'An error occurred!'});
+			}
 
-		if(response.statusCode != 200) {
-			//
-			return res.render('register', {
-				error: response.body,
-				username: req.body.username,
-				first_name: req.body.first_name,
-				last_name: req.body.last_name,
-				phone: req.body.phone
-			});
-		}
+			if(response.statusCode != 200) {
+				//
+				return res.render('register', {
+					error: response.body,
+					username: req.body.username,
+					first_name: req.body.first_name,
+					last_name: req.body.last_name,
+					phone: req.body.phone
+				});
+			}
 
-		req.session.success = "Registration successful!";
-		return res.redirect('/login');
-	});
+			req.session.success = "Registration successful!";
+			return res.redirect('/login');
+		});
+	}
 });
 
 

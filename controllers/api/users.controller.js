@@ -11,6 +11,7 @@ var userServiceConnection = require('services/user.service');
 //routes
 router.post('/authenticate',authenticateUser);
 router.post('/register',registerUser);
+//router.post('/password',changePassword);
 router.get('/current',getCurrentUser);
 router.put('/:_id',updateUser);
 router.delete('/:_id',deleteUser);
@@ -41,6 +42,12 @@ function registerUser(req, res) {
 			res.status(400).send(err);
 		});
 }
+
+/*
+function changePassword(req, res) {
+	userServiceConnection.changePassword().then().catch();
+}
+*/
 
 function getCurrentUser(req, res) {
 	userServiceConnection.getById(req.user.sub)

@@ -63,9 +63,9 @@ function register(user_parameters) {
 		// omit so that we can hash it and add in later (for security)
 			var user = _.omit(user_parameters, 'password');
 			user.password = bcrypt.hashSync(user_parameters.password,10);
+			user.registration_date = (new Date()).toLocaleString();
 
 			// now add user to database
-			console.log(user);
 			gambit_database.collection('users').insert(user, function(err, records) {
 				if(err) {
 					console.log(err);
@@ -80,6 +80,10 @@ function register(user_parameters) {
 
 	return deferred.promise;
 }
+
+/*
+function changePassword
+*/
 
 function getById(user_id) {
 	var deferred = q.defer();
