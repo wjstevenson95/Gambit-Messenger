@@ -15,6 +15,7 @@ var api_service = {};
 
 api_service.authenticate = authenticate;
 api_service.register = register;
+api_service.changePassword = changePassword;
 api_service.getById = getById;
 api_service.update = update;
 api_service.delete = _delete;
@@ -81,9 +82,37 @@ function register(user_parameters) {
 	return deferred.promise;
 }
 
-/*
-function changePassword
-*/
+function changePassword(username, new_password) {
+	var deferred = q.defer();
+	var db = mongo.connect(str_url, function(err, database) {
+		var gambit_users = database.db('gambit_messenger').collection('users');
+		gambit_users.findOne({username: username}, function(err, user) {
+			if(err) deferred.reject(err);
+
+			if(user) {
+				update_password();
+			} else {
+				// Reject because user doesn't exist, so can't change password
+				deferred.reject("User: " + username + "  => does not exist!");
+			}
+		});
+
+		function update_password() {
+			var user_info = {};
+			user_info.password = bcrypt.hashSync(new_password, 10);
+
+			gambit_users.update({username: username}, {$set: user_info}, function(err, doc, status) {
+				if(err) deferred.reject(err);
+
+				deferred.resolve();
+			})
+
+		}
+	});
+
+
+	return deferred.promise;
+}
 
 function getById(user_id) {
 	var deferred = q.defer();
@@ -105,7 +134,7 @@ function getById(user_id) {
 function update(user_id, user_params) {
 	var deferred = q.defer();
 	var db = mongo.connect(str_url, function(err, database) {
-		gambit_users = database.db('gambit_messenger').collection('users');
+		var gambit_users = database.db('gambit_messenger').collection('users');
 		gambit_users.findOne({_id:ObjectId(user_id)}, function(err, user) {
 			if(err) deferred.reject(err);
 				// Check if username has changed
@@ -152,7 +181,7 @@ function update(user_id, user_params) {
 function _delete(user_id) {
 	var deferred = q.defer();
 	var db = mongo.connect(str_url, function(err, database) {
-		gambit_users = database.db('gambit_messenger').collection('users');
+		var gambit_users = database.db('gambit_messenger').collection('users');
 		gambit_users.remove({_id: ObjectId(user_id)}, function(err) {
 			if(err) deferred.reject(err);
 

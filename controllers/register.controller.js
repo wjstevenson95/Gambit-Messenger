@@ -3,12 +3,12 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 
-router.get('/', (req,res) => {
+router.get('/', (req, res) => {
 	res.render('register');
 });
 
 
-router.post('/', (req,res) => {
+router.post('/', (req, res) => {
 	// Get information, then make a request to 'api/users/register'
 	if(req.body.password !== req.body.confirm_password) {
 		return res.render('register', {

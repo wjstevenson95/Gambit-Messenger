@@ -11,7 +11,7 @@ var userServiceConnection = require('services/user.service');
 //routes
 router.post('/authenticate',authenticateUser);
 router.post('/register',registerUser);
-//router.post('/password',changePassword);
+router.post('/password',changePassword);
 router.get('/current',getCurrentUser);
 router.put('/:_id',updateUser);
 router.delete('/:_id',deleteUser);
@@ -43,11 +43,17 @@ function registerUser(req, res) {
 		});
 }
 
-/*
+
 function changePassword(req, res) {
-	userServiceConnection.changePassword().then().catch();
+	console.log("getting to API change password controller");
+	userServiceConnection.changePassword(req.body.username, req.body.new_password)
+		.then(function() {
+			res.sendStatus(200);
+		})
+		.catch(function(err) {
+			res.status(400).send(err);
+		});
 }
-*/
 
 function getCurrentUser(req, res) {
 	userServiceConnection.getById(req.user.sub)
