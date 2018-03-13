@@ -1,2 +1,39 @@
 <!-- View for contacts tab -->
-<p>View for the Contacts Tab - Will be implemented later!!</p>
+<div class="left-bar">
+	<div class="left-bar-contacts">
+		<div class="bar-section-header">
+			<p>Contacts</p>
+		</div>
+		<div class="bar-section-content">
+			<p>Contact names will go here in a scrollable list...</p>
+		</div>
+	</div>
+	<div class="left-bar-pending">
+		<div class="bar-section-header">
+			<p>Pending Contacts</p>
+		</div>
+		<div class="bar-section-content">
+			<p>Pending Contact names will go here in a scrollable list...</p>
+		</div>
+	</div>
+</div>
+<div class="middle-bar">
+	<p>Welcome {{ vm.user.first_name }}!</p>
+</div>
+<div class="right-bar">
+	<div class="bar-section-header">
+		<p>Add Contacts</p>
+	</div>
+	<div class="bar-section-content">
+		<form method="post">
+			<div class="form-group">
+				<label for="username">Username</label>
+				<input type="text" placeholder="Add by username..." id="contact_username" name="contact_username" ng-model="vm.contact_username">
+				<button class="btn btn-primary" ng-click="vm.add_contact()">Add</button>
+			</div>
+		</form>
+		<div class="flash-message" ng-if="flash">
+            <div class="{{'alert alert-' + flash.type}}" ng-bind="flash.message"></div>
+        </div>
+	</div>
+</div>

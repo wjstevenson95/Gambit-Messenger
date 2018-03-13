@@ -17,6 +17,7 @@ api_service.authenticate = authenticate;
 api_service.register = register;
 api_service.changePassword = changePassword;
 api_service.getById = getById;
+api_service.addContact = addContact;
 api_service.update = update;
 api_service.delete = _delete;
 
@@ -25,10 +26,12 @@ module.exports = api_service;
 function authenticate(username,password) {
 	var deferred = q.defer();
 
-	var db = mongo.connect(str_url, function(err, database) {
+	mongo.connect(str_url, function(err, database) {
 		database.db('gambit_messenger').collection('users').findOne({username: username}, function(err, user) {
-			if(err) deferred.reject(err);
-
+			if(err) {
+				deferred.reject(err);
+				return deferred.promise;
+			}
 			// Check if return a valid user with username and that password is correct...
 			if(user && bcrypt.compareSync(password,user.password)) {
 
@@ -44,13 +47,15 @@ function authenticate(username,password) {
 
 function register(user_parameters) {
 	var deferred = q.defer();
-	var db = mongo.connect(str_url, function(err, database) {
+	mongo.connect(str_url, function(err, database) {
 		const gambit_database = database.db('gambit_messenger');
 		gambit_database.collection('users').findOne(
 			{username: user_parameters.username}, 
 			function(err, user) {
-				if(err) deferred.reject(err);
-
+				if(err) {
+					deferred.reject(err);
+					return deferred.promise;
+				}
 				// If found a registered user with the input username
 				if(user) {
 					// username already exists
@@ -65,6 +70,8 @@ function register(user_parameters) {
 			var user = _.omit(user_parameters, 'password');
 			user.password = bcrypt.hashSync(user_parameters.password,10);
 			user.registration_date = (new Date()).toLocaleString();
+			user.friends = [];
+			user.pending = [];
 
 			// now add user to database
 			gambit_database.collection('users').insert(user, function(err, records) {
@@ -84,10 +91,13 @@ function register(user_parameters) {
 
 function changePassword(username, new_password) {
 	var deferred = q.defer();
-	var db = mongo.connect(str_url, function(err, database) {
+	mongo.connect(str_url, function(err, database) {
 		var gambit_users = database.db('gambit_messenger').collection('users');
 		gambit_users.findOne({username: username}, function(err, user) {
-			if(err) deferred.reject(err);
+			if(err) {
+				deferred.reject(err);
+				return deferred.promise;
+			}
 
 			if(user) {
 				update_password();
@@ -116,9 +126,12 @@ function changePassword(username, new_password) {
 
 function getById(user_id) {
 	var deferred = q.defer();
-	var db = mongo.connect(str_url, function(err, database) {
+	mongo.connect(str_url, function(err, database) {
 		database.db('gambit_messenger').collection('users').findOne({_id:ObjectId(user_id)}, function(err, user) {
-			if(err) deferred.reject(err.name + ":" + err.message);
+			if(err) {
+				deferred.reject(err.name + ":" + err.message);
+				return deferred.promise;
+			}
 
 			if(user) {
 				deferred.resolve(_.omit(user,'password'));
@@ -131,12 +144,75 @@ function getById(user_id) {
 	return deferred.promise;
 }
 
+function addContact(contact_username, current_user) {
+	var deferred = q.defer();
+	mongo.connect(str_url, function(err, database) {
+		gambit_users = database.db('gambit_messenger').collection('users');
+		// Check if username exists...
+		gambit_users.findOne({username: contact_username}, function(err, user) {
+			if(err) {
+				deferred.reject(err);
+				return deferred.promise;
+			}
+
+			if(user) {
+				// Check if already friends or already a pending request
+				gambit_users.findOne({
+					$or: [
+						{
+							username: current_user.username,
+							friends: {id: ObjectId(user._id)}
+						},
+						{
+							username: contact_username,
+							pending: {id: ObjectId(current_user._id)}
+						}
+					]
+				}, function(err,user2) {
+					if(err) {
+						deferred.reject(err);
+						return deferred.promise;
+					}
+
+					if(user2) {
+						deferred.reject("Already friends or existing request!");
+						return deferred.promise;
+					}
+
+					// Now add your own object id to contact_usernames pending
+					gambit_users.update(
+						{username: contact_username},
+						{$push: {
+							pending: {id: ObjectId(current_user._id)}
+						}},
+						function(err, count, status) {
+						if(err) {
+							deferred.reject(err);
+							return deferred.promise;
+						}
+
+						deferred.resolve();
+					});
+
+				});
+			} else {
+				deferred.reject("User " + contact_username + " doesn't exist!");
+			}
+		})
+	});
+
+	return deferred.promise;
+}
+
 function update(user_id, user_params) {
 	var deferred = q.defer();
-	var db = mongo.connect(str_url, function(err, database) {
+	mongo.connect(str_url, function(err, database) {
 		var gambit_users = database.db('gambit_messenger').collection('users');
 		gambit_users.findOne({_id:ObjectId(user_id)}, function(err, user) {
-			if(err) deferred.reject(err);
+			if(err) {
+				deferred.reject(err);
+				return deferred.promise;
+			}
 				// Check if username has changed
 			if(user.username !== user_params.username) {
 				// Need to check if new username is available.
@@ -180,12 +256,14 @@ function update(user_id, user_params) {
 
 function _delete(user_id) {
 	var deferred = q.defer();
-	var db = mongo.connect(str_url, function(err, database) {
+	mongo.connect(str_url, function(err, database) {
 		var gambit_users = database.db('gambit_messenger').collection('users');
 		gambit_users.remove({_id: ObjectId(user_id)}, function(err) {
-			if(err) deferred.reject(err);
-
-			deferred.resolve();
+			if(err) {
+				deferred.reject(err);
+			} else {
+				deferred.resolve();
+			}
 		});
 	});
 	return deferred.promise;

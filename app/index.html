@@ -29,9 +29,6 @@
 
 		<!-- based on flash.type, class will evalute to bootstrap 
 		alert alert-success or alert alert-danger... and then displays message-->
-		<div class="flash-message" ng-if="flash">
-            <div class="{{'alert alert-' + flash.type}}" ng-bind="flash.message"></div>
-        </div>
 	</header>
 
 	<main ui-view></main>

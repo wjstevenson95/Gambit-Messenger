@@ -10,6 +10,7 @@
 		service.getCurrent = getCurrent;
 		service.updateUser = updateUser;
 		service.deleteUser = deleteUser;
+		service.addContact = addContact;
 
 		return service;
 
@@ -18,14 +19,22 @@
 			return $http.get('/api/users/current').then(handle_success, handle_error);
 		}
 
-		function updateUser(user) {
+		function updateUser(user_info) {
 			// Update information of current user
-			return $http.put('/api/users/' + user._id, user).then(handle_success, handle_error);
+			return $http.put('/api/users/' + user._id, user_info).then(handle_success, handle_error);
 		}
 
 		function deleteUser(user_id) {
 			// Delete current user
 			return $http.delete('/api/users/' + user_id).then(handle_success, handle_error);
+		}
+
+		function addContact(contact_username, user) {
+			var input = {
+				contact_username: contact_username,
+				user: user
+			}
+			return $http.put('/api/users/add_contact',input).then(handle_success, handle_error);
 		}
 
 		function handle_success(res) {

@@ -19,6 +19,7 @@ router.post('/', (req, res) => {
 			phone: req.body.phone
 		});
 	} else {
+		delete req.body.confirm_password;
 		request.post({
 		url: process.env.API_URL + '/users/register',
 		form: req.body,

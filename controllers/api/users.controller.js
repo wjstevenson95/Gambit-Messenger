@@ -13,6 +13,7 @@ router.post('/authenticate',authenticateUser);
 router.post('/register',registerUser);
 router.post('/password',changePassword);
 router.get('/current',getCurrentUser);
+router.put('/add_contact',addContact)
 router.put('/:_id',updateUser);
 router.delete('/:_id',deleteUser);
 
@@ -63,6 +64,17 @@ function getCurrentUser(req, res) {
 			} else {
 				res.sendStatus(404);
 			}
+		})
+		.catch(function(err) {
+			res.status(400).send(err);
+		});
+}
+
+function addContact(req, res) {
+	//req.body should be contact_username
+	userServiceConnection.addContact(req.body.contact_username, req.body.user)
+		.then(function() {
+			res.sendStatus(200);
 		})
 		.catch(function(err) {
 			res.status(400).send(err);

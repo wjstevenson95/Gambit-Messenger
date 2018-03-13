@@ -7,7 +7,7 @@
 	function controller($window, UserService, FlashService) {
 		var vm = this;
 		vm.user = null;
-		vm.update_user = save_user;
+		vm.update_user = update_user;
 		vm.delete_user = delete_user;
 
 		initialize_controller();
@@ -15,15 +15,16 @@
 		function initialize_controller() {
 			UserService.getCurrent().then(function(user) {
 				vm.user = user;
-			})
+			});
 		}
 
-		function save_user() {
+		function update_user() {
 			UserService.updateUser(vm.user).then(function() {
 				FlashService.success('User Updated!');
-			}).catch(function(err) {
-				FlashService.error(err);
 			})
+			.catch(function(err) {
+				FlashService.error(err);
+			});
 		}
 
 		function delete_user() {
