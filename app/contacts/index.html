@@ -5,7 +5,7 @@
 			<p>Contacts</p>
 		</div>
 		<div class="bar-section-content">
-			<p>Contact names will go here in a scrollable list...</p>
+			<div class="contact-chip" ng-repeat="contact in vm.current_friends">{{ contact.first_name }}  {{ contact.last_name }}</div>
 		</div>
 	</div>
 	<div class="left-bar-pending">
@@ -13,7 +13,15 @@
 			<p>Pending Contacts</p>
 		</div>
 		<div class="bar-section-content">
-			<p>Pending Contact names will go here in a scrollable list...</p>
+			<div class="pending-contact-chip" ng-repeat="user in vm.current_pending">
+				<div class="pending-contact-chip-name">
+					<p>{{ user.first_name }} {{ user.last_name }}</p>
+				</div>
+				<div class="pending-contact-chip-buttons">
+					<button class="btn btn-primary btn-xs">Accept</button>
+					<button class="btn btn-danger btn-xs">Decline</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

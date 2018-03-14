@@ -11,6 +11,7 @@
 		service.updateUser = updateUser;
 		service.deleteUser = deleteUser;
 		service.addContact = addContact;
+		service.getContactInfo = getContactInfo;
 
 		return service;
 
@@ -35,6 +36,10 @@
 				user: user
 			}
 			return $http.put('/api/users/add_contact',input).then(handle_success, handle_error);
+		}
+
+		function getContactInfo(contact_id) {
+			return $http.get('/api/users/get_contact/' + contact_id).then(handle_success, handle_error);
 		}
 
 		function handle_success(res) {

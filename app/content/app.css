@@ -1,8 +1,14 @@
 /* CSS file for angular app
 */
-html, body, main {
+html, body{
 	height: 100%;
 	width: 100%;
+	position: fixed;
+}
+
+main {
+	width: 100%;
+	height: 100%;
 }
 
 .navbar {
@@ -82,7 +88,55 @@ html, body, main {
 	overflow: scroll;
 }
 
+.bar-section-content {
+	width: 100%;
+	margin: 0;
+	overflow: scroll;
+}
+
+.left-bar-contacts .bar-section-content {
+	height: 386.39px;
+}
+
+.left-bar-pending .bar-section-content {
+	height: 242.58px;
+}
+
+.right-bar .bar-section-content {
+	height: 676px;
+}
+
 .right-bar form {
 	padding-left: 35px;
 	padding-top: 15px;
+}
+
+
+
+
+/* CSS FOR CONTACTS AND PENDING CONTACTS */
+
+.pending-contact-chip {
+	width: 100%;
+	height: 30px;
+	margin: 0;
+	background-color: #bcbfc4;
+}
+
+.pending-contact-chip-name {
+	height: 100%;
+	width: 60%;
+	float: left;
+	border-bottom: 1px solid black;
+}
+
+.pending-contact-chip-buttons {
+	height: 100%;
+	width: 40%;
+	float: left;
+	border-bottom: 1px solid black;
+}
+
+.pending-contact-chip-name p {
+	text-align: center;
 }

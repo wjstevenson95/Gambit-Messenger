@@ -18,6 +18,7 @@ api_service.register = register;
 api_service.changePassword = changePassword;
 api_service.getById = getById;
 api_service.addContact = addContact;
+api_service.getContactInfo = getContactInfo;
 api_service.update = update;
 api_service.delete = _delete;
 
@@ -202,6 +203,28 @@ function addContact(contact_username, current_user) {
 	});
 
 	return deferred.promise;
+}
+
+function getContactInfo(contact_id) {
+	var deferred = q.defer();
+	mongo.connect(str_url, function(err, database) {
+		var gambit_users = database.db('gambit_messenger').collection('users');
+		gambit_users.findOne({_id: ObjectId(contact_id)}, function(err, contact) {
+			if(err) {
+				deferred.reject(err);
+				return deferred.promise;
+			}
+
+			if(contact) {
+				deferred.resolve(_.omit(contact, 'password'));
+			} else {
+				deferred.resolve();
+			}
+		});
+	});
+
+	return deferred.promise;
+
 }
 
 function update(user_id, user_params) {
