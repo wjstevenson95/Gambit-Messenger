@@ -18,6 +18,8 @@ api_service.register = register;
 api_service.changePassword = changePassword;
 api_service.getById = getById;
 api_service.addContact = addContact;
+api_service.acceptContact = acceptContact;
+api_service.declineContact = declineContact;
 api_service.getContactInfo = getContactInfo;
 api_service.update = update;
 api_service.delete = _delete;
@@ -71,7 +73,7 @@ function register(user_parameters) {
 			var user = _.omit(user_parameters, 'password');
 			user.password = bcrypt.hashSync(user_parameters.password,10);
 			user.registration_date = (new Date()).toLocaleString();
-			user.friends = [];
+			user.contacts = [];
 			user.pending = [];
 
 			// now add user to database
@@ -162,7 +164,7 @@ function addContact(contact_username, current_user) {
 					$or: [
 						{
 							username: current_user.username,
-							friends: {id: ObjectId(user._id)}
+							contacts: {id: ObjectId(user._id)}
 						},
 						{
 							username: contact_username,
@@ -187,19 +189,95 @@ function addContact(contact_username, current_user) {
 							pending: {id: ObjectId(current_user._id)}
 						}},
 						function(err, count, status) {
-						if(err) {
-							deferred.reject(err);
-							return deferred.promise;
-						}
+							if(err) {
+								deferred.reject(err);
+								return deferred.promise;
+							}
 
-						deferred.resolve();
-					});
+							deferred.resolve();
+						});
 
 				});
 			} else {
 				deferred.reject("User " + contact_username + " doesn't exist!");
 			}
 		})
+	});
+
+	return deferred.promise;
+}
+
+function acceptContact(user_id, contact_id) {
+	var deferred = q.defer();
+	// Remove from contact pending and your pending. Add to contact friends and your friends
+	mongo.connect(str_url, function(err, database) {
+		var gambit_users = database.db('gambit_messenger').collection('users');
+
+		// Remove contact from current user's pending list
+		gambit_users.update(
+			{_id: ObjectId(user_id)},
+			{$pull: {
+				pending: {id: ObjectId(contact_id)}
+			}},
+			function(err, count, status) {
+				if(err) {
+					deferred.reject(err);
+					return deferred.promise;
+				}
+			});
+
+		// Add to current contacts
+		gambit_users.update(
+			{_id: ObjectId(user_id)},
+			{$push: {
+				contacts: {id: ObjectId(contact_id)}
+			}},
+			function(err,count,status) {
+				if(err) {
+					deferred.reject(err);
+					return deferred.promise;
+				}
+			});
+
+		// Add to contact's list
+		gambit_users.update(
+			{_id: ObjectId(contact_id)},
+			{$push: {
+				contacts: {id: ObjectId(user_id)}
+			}},
+			function(err,count,status) {
+				if(err) {
+					deferred.reject(err);
+					return deferred.promise;
+				}
+
+				deferred.resolve();
+			});
+	});
+
+	return deferred.promise;
+
+}
+
+function declineContact(user_id, contact_id) {
+	var deferred = q.defer();
+	// Remove from contact pending and your pending.
+	mongo.connect(str_url, function(err, database) {
+		var gambit_users = database.db('gambit_messenger').collection('users');
+
+		gambit_users.update(
+			{_id: ObjectId(user_id)},
+			{$pull: {
+				pending: {id: ObjectId(contact_id)}
+			}},
+			function(err, count, status) {
+				if(err) {
+					deferred.reject(err);
+					return deferred.promise;
+				}
+
+				deferred.resolve();
+			});
 	});
 
 	return deferred.promise;

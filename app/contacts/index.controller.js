@@ -4,22 +4,27 @@
 
 	angular.module('app').controller('Contacts.IndexController',controller);
 
-	function controller(UserService, FlashService) {
+	function controller($window, UserService, FlashService) {
 		var vm = this;
 		vm.user = null;
-		vm.current_pending = [];
-		vm.current_friends = [];
 		vm.add_contact = add_contact;
+		vm.accept_contact = accept_contact;
+		vm.decline_contact = decline_contact;
 
-		initializer_controller();
+		initialize_controller();
 
-		function initializer_controller() {
+		function initialize_controller() {
 			UserService.getCurrent().then(function(user) {
 				vm.user = user;
 
-				for(var i = 0; i < vm.user.friends.length; i++) {
-					UserService.getContactInfo(vm.user.friends[i].id).then(function(contact) {
-						vm.current_friends.push(contact);
+				vm.current_contacts = [];
+				vm.current_pending = [];
+				console.log("Contacts length: " + vm.user.contacts.length);
+
+				for(var i = 0; i < vm.user.contacts.length; i++) {
+					UserService.getContactInfo(vm.user.contacts[i].id).then(function(contact) {
+						console.log("should print three times...");
+						vm.current_contacts.push(contact);
 					});
 				}
 
@@ -28,19 +33,38 @@
 						vm.current_pending.push(pending_contact);
 					});
 				}
-
-				console.log(vm.current_pending);
 			});
 		};
 
 		function add_contact() {
-			console.log(vm.contact_username);
 			UserService.addContact(vm.contact_username, vm.user).then(function() {
-				FlashService.success('Contact added!')
+				FlashService.success('Contact added!');
 			})
 			.catch(function(err) {
 				FlashService.error(err);
 			});
+		};
+
+		function accept_contact(user_id, contact_id) {
+			UserService.acceptContact(user_id, contact_id).then(function() {
+				FlashService.success('New contact!');
+			})
+			.catch(function(err) {
+				FlashService.error(err);
+			});
+
+			$window.location.reload();
+		};
+
+		function decline_contact(user_id, contact_id) {
+			UserService.declineContact(user_id, contact_id).then(function() {
+				FlashService.success('Contact declined!');
+			})
+			.catch(function(err) {
+				FlashService.error(err);
+			});
+
+			initialize_controller();
 		};
 	}
 })();

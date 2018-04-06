@@ -14,6 +14,8 @@ router.post('/register',registerUser);
 router.post('/password',changePassword);
 router.get('/current',getCurrentUser);
 router.put('/add_contact',addContact);
+router.put('/accept',acceptContact);
+router.put('/decline',declineContact);
 router.get('/get_contact/:id',getContactInfo);
 router.put('/:_id',updateUser);
 router.delete('/:_id',deleteUser);
@@ -82,8 +84,27 @@ function addContact(req, res) {
 		});
 }
 
+function acceptContact(req, res) {
+	userServiceConnection.acceptContact(req.body.user_id, req.body.contact_id)
+		.then(function() {
+			res.sendStatus(200);
+		})
+		.catch(function(err) {
+			res.status(400).send(err);
+		});
+}
+
+function declineContact(req, res) {
+	userServiceConnection.declineContact(req.body.user_id, req.body.contact_id)
+		.then(function() {
+			res.sendStatus(200);
+		})
+		.catch(function(err) {
+			res.status(400).send(err);
+		});
+}
+
 function getContactInfo(req, res) {
-	console.log(req.params.id);
 	userServiceConnection.getContactInfo(req.params.id)
 		.then(function(contact) {
 			if(contact) {

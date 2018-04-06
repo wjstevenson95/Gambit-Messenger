@@ -5,7 +5,9 @@
 			<p>Contacts</p>
 		</div>
 		<div class="bar-section-content">
-			<div class="contact-chip" ng-repeat="contact in vm.current_friends">{{ contact.first_name }}  {{ contact.last_name }}</div>
+			<div class="contact-chip" ng-repeat="contact in vm.current_contacts">
+				<p>{{ contact.first_name }}  {{ contact.last_name }}</p>
+			</div>
 		</div>
 	</div>
 	<div class="left-bar-pending">
@@ -18,8 +20,8 @@
 					<p>{{ user.first_name }} {{ user.last_name }}</p>
 				</div>
 				<div class="pending-contact-chip-buttons">
-					<button class="btn btn-primary btn-xs">Accept</button>
-					<button class="btn btn-danger btn-xs">Decline</button>
+					<button class="btn btn-primary btn-xs" ng-click="vm.accept_contact(vm.user._id, user._id)">Accept</button>
+					<button class="btn btn-danger btn-xs" ng-click="vm.decline_contact(vm.user._id, user._id)">Decline</button>
 				</div>
 			</div>
 		</div>
