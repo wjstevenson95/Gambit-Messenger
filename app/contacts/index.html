@@ -5,9 +5,12 @@
 			<p>Contacts</p>
 		</div>
 		<div class="bar-section-content">
-			<div class="contact-chip" ng-repeat="contact in vm.current_contacts">
-				<p>{{ contact.first_name }}  {{ contact.last_name }}</p>
-			</div>
+			<ul class="list-group">
+				<li><input class="form-control" placeholder="Search Your Contacts" type="text" ng-model="searchText"></li>
+				<a class="list-group-item" ng-repeat="contact in vm.current_contacts | orderBy: 'first_name' | filter:searchText" ng-click="vm.set_active_contact(contact)">
+				{{ contact.first_name }}  {{ contact.last_name }}
+				</a>
+			</ul>
 		</div>
 	</div>
 	<div class="left-bar-pending">
@@ -15,21 +18,45 @@
 			<p>Pending Contacts</p>
 		</div>
 		<div class="bar-section-content">
-			<div class="pending-contact-chip" ng-repeat="user in vm.current_pending">
-				<div class="pending-contact-chip-name">
-					<p>{{ user.first_name }} {{ user.last_name }}</p>
-				</div>
-				<div class="pending-contact-chip-buttons">
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="user in vm.current_pending">
+					{{ user.first_name }} {{ user.last_name }}
 					<button class="btn btn-primary btn-xs" ng-click="vm.accept_contact(vm.user._id, user._id)">Accept</button>
 					<button class="btn btn-danger btn-xs" ng-click="vm.decline_contact(vm.user._id, user._id)">Decline</button>
-				</div>
-			</div>
+				</li>
+			</ul>
 		</div>
 	</div>
 </div>
+
+
 <div class="middle-bar">
-	<p>Welcome {{ vm.user.first_name }}!</p>
+<!-- For showing contact information -->
+	<div class="panel panel-primary" ng-if="vm.active_contact != null">
+		<div class="panel-header">
+			<h3>{{vm.active_contact.first_name}} {{vm.active_contact.last_name}}</h3>
+		</div>
+		<div class="panel-body">
+			<li class="form-group-item"><label for="first_name">First Name</label>
+			<input type="text" name="first_name" ng-model="vm.active_contact.first_name"></li>
+
+			<li class="form-group-item"><label for=last_name"">Last Name</label>
+			<input type="text" name="last_name" ng-model="vm.active_contact.last_name"></li>
+
+			<li class="form-group-item"><label for="username">Username</label>
+			<input type="text" name="username" ng-model="vm.active_contact.username"></li>
+
+			<li class="form-group-item"><label for="">Phone Number</label>
+			<input type="text" name="phone" ng-model="vm.active_contact.phone"></li>
+
+			<button class="btn btn-danger" ng-click="">Remove Contact</button>
+		</div>
+
+		<div class="panel-footer"></div>
+	</div>
 </div>
+
+
 <div class="right-bar">
 	<div class="bar-section-header">
 		<p>Add Contacts</p>

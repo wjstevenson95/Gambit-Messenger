@@ -10,6 +10,8 @@
 		vm.add_contact = add_contact;
 		vm.accept_contact = accept_contact;
 		vm.decline_contact = decline_contact;
+		vm.set_active_contact = set_active_contact;
+		vm.active_contact = null;
 
 		initialize_controller();
 
@@ -66,5 +68,14 @@
 
 			initialize_controller();
 		};
+
+		function set_active_contact(contact) {
+			vm.active_contact = contact;
+
+			$(".list-group-item").live('click', function(){ 
+    			$('.active').removeClass('active');
+    			$(this).addClass('active'); 
+    		});
+		}
 	}
 })();

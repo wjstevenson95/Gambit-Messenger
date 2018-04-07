@@ -116,6 +116,19 @@ main {
 
 /* CSS FOR CONTACTS AND PENDING CONTACTS */
 
+.contact-chip {
+	width: 100%;
+	height: 30px;
+	margin: 0;
+	border-bottom: 1px solid black;
+}
+
+.contact-chip a {
+	height: 100%;
+	width: 100%;
+	margin: auto;
+}
+
 .pending-contact-chip {
 	width: 100%;
 	height: 30px;
@@ -140,3 +153,7 @@ main {
 .pending-contact-chip-name p {
 	text-align: center;
 }
+
+
+/* CSS FOR ACTIVE CONTACT */
+
