@@ -19,6 +19,7 @@ api_service.changePassword = changePassword;
 api_service.getById = getById;
 api_service.addContact = addContact;
 api_service.acceptContact = acceptContact;
+api_service.removeContact = removeContact;
 api_service.declineContact = declineContact;
 api_service.getContactInfo = getContactInfo;
 api_service.update = update;
@@ -202,6 +203,42 @@ function addContact(contact_username, current_user) {
 				deferred.reject("User " + contact_username + " doesn't exist!");
 			}
 		})
+	});
+
+	return deferred.promise;
+}
+
+function removeContact(user_id, contact_id) {
+	var deferred = q.defer();
+
+	mongo.connect(str_url, function(err, database) {
+		var gambit_users = database.db('gambit_messenger').collection('users');
+
+		gambit_users.update(
+			{_id: ObjectId(user_id)},
+			{$pull: {
+				contacts: {id: ObjectId(contact_id)}
+			}},
+			function(err, count, status) {
+				if(err) {
+					deferred.reject(err);
+					return deferred.promise;
+				}
+			});
+
+		gambit_users.update(
+			{_id: ObjectId(contact_id)},
+			{$pull: {
+				contacts: {id: ObjectId(user_id)}
+			}},
+			function(err, count, status) {
+				if(err) {
+					deferred.reject(err);
+					return deferred.promise;
+				}
+
+				deferred.resolve();
+			});
 	});
 
 	return deferred.promise;

@@ -11,6 +11,7 @@
 		service.updateUser = updateUser;
 		service.deleteUser = deleteUser;
 		service.addContact = addContact;
+		service.removeContact = removeContact;
 		service.acceptContact = acceptContact;
 		service.declineContact = declineContact;
 		service.getContactInfo = getContactInfo;
@@ -38,6 +39,14 @@
 				user: user
 			}
 			return $http.put('/api/users/add_contact',input).then(handle_success, handle_error);
+		}
+
+		function removeContact(user_id, contact_id) {
+			var input = {
+				user_id: user_id,
+				contact_id: contact_id
+			};
+			return $http.put('/api/users/remove_contact', input).then(handle_success, handle_error);
 		}
 
 		function acceptContact(user_id, contact_id) {

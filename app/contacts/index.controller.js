@@ -10,6 +10,7 @@
 		vm.add_contact = add_contact;
 		vm.accept_contact = accept_contact;
 		vm.decline_contact = decline_contact;
+		vm.remove_contact = remove_contact;
 		vm.set_active_contact = set_active_contact;
 		vm.active_contact = null;
 
@@ -47,6 +48,17 @@
 			});
 		};
 
+		function remove_contact() {
+			UserService.removeContact(vm.user._id, vm.active_contact._id).then(function() {
+				FlashService.success('Contact removed!');
+			})
+			.catch(function(err) {
+				FlashService.error(err);
+			});
+
+			$window.location.reload();
+		}
+
 		function accept_contact(user_id, contact_id) {
 			UserService.acceptContact(user_id, contact_id).then(function() {
 				FlashService.success('New contact!');
@@ -71,11 +83,6 @@
 
 		function set_active_contact(contact) {
 			vm.active_contact = contact;
-
-			$(".list-group-item").live('click', function(){ 
-    			$('.active').removeClass('active');
-    			$(this).addClass('active'); 
-    		});
 		}
 	}
 })();
