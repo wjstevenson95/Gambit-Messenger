@@ -2,6 +2,7 @@ require('dotenv').config();
 require('rootpath')();
 var express = require('express');
 var app = express();
+var http = require('http').Server(app);
 var session = require('express-session');
 var morgan = require('morgan');
 var body_parser = require('body-parser');
@@ -31,6 +32,6 @@ app.get('/', (req,res) => {
 	return res.redirect('/app');
 });
 
-var server = app.listen(8080, () => {
+http.listen(8080, () => {
 	console.log('Server listening at localhost on port 8080');
 });
