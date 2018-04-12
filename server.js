@@ -1,9 +1,10 @@
 require('dotenv').config();
 require('rootpath')();
-var express = require('express');
-var app = express();
-var http = require('http').Server(app);
+var app = require('express')();
+var server = require('http').createServer(app);
 var session = require('express-session');
+var io = require('socket.io')(server);
+
 var morgan = require('morgan');
 var body_parser = require('body-parser');
 var expressJwt = require('express-jwt');
