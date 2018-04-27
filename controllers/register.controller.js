@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
 	// Get information, then make a request to 'api/users/register'
-	return res.redirect('/login');
+	//return res.redirect('/login');
 
 	if(req.body.password !== req.body.confirm_password) {
 		return res.render('register', {

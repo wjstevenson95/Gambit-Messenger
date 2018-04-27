@@ -33,6 +33,6 @@ app.get('/', (req,res) => {
 	return res.redirect('/app');
 });
 
-http.listen(8080, () => {
+server.listen(8080, () => {
 	console.log('Server listening at localhost on port 8080');
 });
