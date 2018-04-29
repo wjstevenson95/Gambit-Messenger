@@ -15,6 +15,8 @@
 		service.acceptContact = acceptContact;
 		service.declineContact = declineContact;
 		service.getContactInfo = getContactInfo;
+		service.getCurrentBlogs = getCurrentBlogs;
+		service.submitBlog = submitBlog;
 
 		return service;
 
@@ -67,6 +69,14 @@
 
 		function getContactInfo(contact_id) {
 			return $http.get('/api/users/get_contact/' + contact_id).then(handle_success, handle_error);
+		}
+
+		function getCurrentBlogs() {
+			return $http.get('/api/users/current_blogs').then(handle_success, handle_error);
+		}
+
+		function submitBlog(blog) {
+			return $http.put('/api/users/submit_blog',blog).then(handle_success, handle_error);
 		}
 
 		function handle_success(res) {

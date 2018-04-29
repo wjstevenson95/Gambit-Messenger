@@ -13,6 +13,8 @@ router.post('/authenticate',authenticateUser);
 router.post('/register',registerUser);
 router.post('/password',changePassword);
 router.get('/current',getCurrentUser);
+router.get('/current_blogs',getCurrentBlogs);
+router.put('/submit_blog',submitBlog);
 router.put('/add_contact',addContact);
 router.put('/remove_contact',removeContact);
 router.put('/accept',acceptContact);
@@ -68,6 +70,30 @@ function getCurrentUser(req, res) {
 			} else {
 				res.sendStatus(404);
 			}
+		})
+		.catch(function(err) {
+			res.status(400).send(err);
+		});
+}
+
+function getCurrentBlogs(req, res) {
+	userServiceConnection.getCurrentBlogs()
+		.then(function(blogs) {
+			if(blogs) {
+				res.send(blogs);
+			} else {
+				res.sendStatus(404);
+			}
+		})
+		.catch(function(err) {
+			res.status(400).send(err);
+		})
+}
+
+function submitBlog(req, res) {
+	userServiceConnection.submitBlog(req.body)
+		.then(function() {
+			res.sendStatus(200);
 		})
 		.catch(function(err) {
 			res.status(400).send(err);

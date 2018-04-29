@@ -1,5 +1,43 @@
 <!-- View for home tab -->
-<div class="welcome-container">
-	<p>GAMBIT</p>
-	<p>Welcome {{ vm.user.first_name }}</p>
+<div class="left-blog-div">
+	<div class="bar-section-header">
+		<p>Current Blogs</p>
+	</div>
+	<div class="bar-section-content">
+		<ul class="list-group">
+				<li><input class="form-control" placeholder="Search Blogs" type="text" ng-model="searchText"></li>
+				<a class="list-group-item" ng-repeat="blog in vm.blogs | orderBy: 'blog.timestamp' | filter:searchText" ng-click="vm.set_active_blog(blog)">
+				{{ blog.title }} : {{ blog.author }}
+				</a>
+			</ul>
+	</div>
+</div>
+
+
+<div class="middle-blog-div">
+	<p><strong>{{ vm.active_blog.title }}</strong></p>
+	<p>{{ vm.active_blog.author }}</p>
+	<p>{{ vm.active_blog.text }}
+</div>
+
+<div class="right-blog-div">
+	<div class="bar-section-header">
+		<p>New Blog</p>
+	</div>
+	<div class="bar-section-content">
+		<form method="post">
+			<div class="form-group">
+				<label for="blog_title">Title</label>
+				<input type="text" placeholder="Blog title..." class="form-control" name="blog_title" id="blog_title" ng-model="vm.blog_title">
+			</div>
+			<div class="blog-text">
+				<label for="blog_text">Text</label>
+				<textarea type="text" rows="20" style="resize: none"placeholder="Text..."  class="form-control" name="blog_text" id="blog_text" ng-model="vm.blog_text"></textarea>
+			</div>
+			<div class="form-group">
+				<button class="btn btn-primary" ng-click="vm.submit_blog()">Submit Blog</button>
+				<p style="float: right">{{ vm.blog_text.length }}/200</p>
+			</div>
+		</form>
+	</div>
 </div>

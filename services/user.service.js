@@ -17,6 +17,8 @@ api_service.authenticate = authenticate;
 api_service.register = register;
 api_service.changePassword = changePassword;
 api_service.getById = getById;
+api_service.getCurrentBlogs = getCurrentBlogs;
+api_service.submitBlog = submitBlog;
 api_service.addContact = addContact;
 api_service.acceptContact = acceptContact;
 api_service.removeContact = removeContact;
@@ -144,6 +146,43 @@ function getById(user_id) {
 			}
 		});
 	});
+
+	return deferred.promise;
+}
+
+function getCurrentBlogs() {
+	var deferred = q.defer();
+	mongo.connect(str_url, function(err, database) {
+		database.db('gambit_messenger').collection('blogs').find({}, function(err, blogs) {
+			if(err) {
+				deferred.reject(err);
+				return deferred.promise;
+			}
+
+			if(blogs.hasNext()) {
+				deferred.resolve(blogs.toArray());
+			} else {
+				deferred.resolve([]);
+			}
+		})
+	});
+
+	return deferred.promise;
+}
+
+function submitBlog(blog) {
+	console.log("got to service...");
+	var deferred = q.defer();
+	mongo.connect(str_url, function(err, database) {
+		database.db('gambit_messenger').collection('blogs').insert(blog, function(err, docs) {
+			if(err) {
+				deferred.reject(err);
+				return deferred.promise;
+			}
+
+			deferred.resolve();
+		})
+	})
 
 	return deferred.promise;
 }
