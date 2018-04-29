@@ -36,8 +36,12 @@
 			</div>
 			<div class="form-group">
 				<button class="btn btn-primary" ng-click="vm.submit_blog()">Submit Blog</button>
-				<p style="float: right">{{ vm.blog_text.length }}/200</p>
+				<p style="float: right">{{ vm.blog_text.length }}/{{ vm.max_blog_size }}</p>
 			</div>
+			<div class="flash-message" ng-if="flash">
+            	<div class="{{'alert alert-' + flash.type}}" ng-bind="flash.message">
+				</div>
+            </div>
 		</form>
 	</div>
 </div>

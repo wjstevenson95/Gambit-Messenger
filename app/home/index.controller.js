@@ -13,6 +13,7 @@
 		vm.active_blog = null;
 		vm.set_active_blog = set_active_blog;
 		vm.submit_blog = submit_blog;
+		vm.max_blog_size = 500;
 
 		initialize_controller();
 
@@ -29,22 +30,25 @@
 		}
 
 		function submit_blog() {
-			console.log("submitting....");
-			var new_blog = {
-				author: vm.user.first_name + " " + vm.user.last_name,
-				title: vm.blog_title,
-				text: vm.blog_text,
-				timestamp: Date.now()
+			if(vm.blog_text.length > vm.max_blog_size) {
+				FlashService.error("Too many characters!");
+			} else {
+				var new_blog = {
+					author: vm.user.first_name + " " + vm.user.last_name,
+					title: vm.blog_title,
+					text: vm.blog_text,
+					timestamp: Date.now()
+				}
+
+				UserService.submitBlog(new_blog).then(function() {
+					FlashService.success('Blog submitted!');
+				})
+				.catch(function(err) {
+					FlashService.error(err);
+				})
+
+				$window.location.reload();
 			}
-
-			UserService.submitBlog(new_blog).then(function() {
-				FlashService.success('Blog submitted!');
-			})
-			.catch(function(err) {
-				FlashService.error(err);
-			})
-
-			$window.location.reload();
 		}
 
 		function set_active_blog(blog) {

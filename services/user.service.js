@@ -153,18 +153,14 @@ function getById(user_id) {
 function getCurrentBlogs() {
 	var deferred = q.defer();
 	mongo.connect(str_url, function(err, database) {
-		database.db('gambit_messenger').collection('blogs').find({}, function(err, blogs) {
+		database.db('gambit_messenger').collection('blogs').find({}).toArray(function(err, results) {
 			if(err) {
 				deferred.reject(err);
 				return deferred.promise;
 			}
 
-			if(blogs.hasNext()) {
-				deferred.resolve(blogs.toArray());
-			} else {
-				deferred.resolve([]);
-			}
-		})
+			deferred.resolve(results);
+		});
 	});
 
 	return deferred.promise;
