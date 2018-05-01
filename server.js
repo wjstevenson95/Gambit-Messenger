@@ -1,4 +1,5 @@
-require('dotenv').config();
+//require('dotenv').config();
+require('rootpath')();
 var app = require('express')();
 var server = require('http').createServer(app);
 var session = require('express-session');
@@ -32,6 +33,6 @@ app.get('/', (req,res) => {
 	return res.redirect('/app');
 });
 
-server.listen(8080, () => {
+server.listen(process.env.PORT, () => {
 	console.log('Server listening at localhost on port 8080');
 });
