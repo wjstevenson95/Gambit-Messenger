@@ -6,7 +6,7 @@ var router = express.Router();
 
 // This require will return the module.exports = api_service, which gives access to.
 // authenticate, register, getById, update, _delete
-var userServiceConnection = require('../../services/user.service');
+var userServiceConnection = require('services/user.service');
 
 //routes
 router.post('/authenticate',authenticateUser);

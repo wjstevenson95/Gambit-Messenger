@@ -1,3 +1,4 @@
+require('dotenv').config();
 var app = require('express')();
 var server = require('http').createServer(app);
 var session = require('express-session');
