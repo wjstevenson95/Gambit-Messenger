@@ -10,6 +10,7 @@
 
 	function config($stateProvider, $urlRouterProvider) {
 		// Default route
+		// Random comment
 		$urlRouterProvider.otherwise('/');
 
 		$stateProvider
