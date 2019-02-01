@@ -1,4 +1,4 @@
-//require('dotenv').config();
+require('dotenv').config();
 require('rootpath')();
 var app = require('express')();
 var server = require('http').createServer(app);

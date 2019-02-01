@@ -1,5 +1,5 @@
 # Gambit-Messenger
-A simple messaging web application built on MEAN stack.
+A simple (soon-to-be) "messaging" web application built on MEAN stack.
 
 
 File Structure:
